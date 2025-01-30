@@ -19,11 +19,25 @@
         .is-invalid {
             border: 1px solid red;
         }
+        .form-label {
+            font-size: 14px;
+        }
+        @media (max-width: 576px) {
+            .form-label {
+                font-size: 12px;
+            }
+            .form-control, .form-select {
+                font-size: 12px;
+            }
+            .btn {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="mb-4">Order Form</h1>
+        <h1 class="mb-4 text-center">Order Form</h1>
         {% if error %}
             <div class="alert alert-danger" role="alert">
                 {{ error }}
@@ -31,39 +45,51 @@
         {% endif %}
         <form method="POST" action="/order">
             <!-- Customer Details -->
-            <div class="mb-3">
-                <label for="customer_account" class="form-label">Customer Account Number:</label>
-                <input type="text" class="form-control" name="customer_account" id="customer_account" required>
-            </div>
-            <div class="mb-3">
-                <label for="store_name" class="form-label">Store Name:</label>
-                <input type="text" class="form-control" name="store_name" id="store_name" required>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="customer_account" class="form-label">Customer Account Number:</label>
+                    <input type="text" class="form-control" name="customer_account" id="customer_account" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="store_name" class="form-label">Store Name:</label>
+                    <input type="text" class="form-control" name="store_name" id="store_name" required>
+                </div>
             </div>
 
             <!-- Products Section -->
             <div id="products-section">
-                <h3>Products</h3>
-                <div class="product-row d-flex align-items-center">
-                    <input type="text" class="form-control me-2 product-search" placeholder="Search Product">
-                    <select class="form-select me-2 product-dropdown" name="product_name[]" required></select>
-                    <input type="number" class="form-control me-2" name="quantity[]" placeholder="Quantity" min="1" required>
-                    <button type="button" class="btn btn-danger remove-product-btn">Remove</button>
+                <h3 class="mb-3">Products</h3>
+                <div class="row product-row align-items-center">
+                    <div class="col-sm-6 col-md-4">
+                        <input type="text" class="form-control product-search" placeholder="Search Product">
+                    </div>
+                    <div class="col-sm-3 col-md-4">
+                        <select class="form-select product-dropdown" name="product_name[]" required></select>
+                    </div>
+                    <div class="col-sm-3 col-md-2">
+                        <input type="number" class="form-control" name="quantity[]" placeholder="Quantity" min="1" required>
+                    </div>
+                    <div class="col-12 col-md-2 mt-2 mt-md-0">
+                        <button type="button" class="btn btn-danger w-100 remove-product-btn">Remove</button>
+                    </div>
                 </div>
             </div>
-            <button type="button" id="add-product-btn" class="btn btn-secondary add-product-btn">Add Product</button>
+            <button type="button" id="add-product-btn" class="btn btn-secondary add-product-btn mb-3">Add Product</button>
 
             <!-- Delivery Details -->
-            <div class="mb-3">
-                <label for="delivery_date" class="form-label">Delivery Date:</label>
-                <input type="date" class="form-control" name="delivery_date" id="delivery_date" required>
-            </div>
-            <div class="mb-3">
-                <label for="priority" class="form-label">Priority:</label>
-                <select class="form-select" name="priority" id="priority" required>
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                </select>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="delivery_date" class="form-label">Delivery Date:</label>
+                    <input type="date" class="form-control" name="delivery_date" id="delivery_date" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="priority" class="form-label">Priority:</label>
+                    <select class="form-select" name="priority" id="priority" required>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Description -->
@@ -72,9 +98,12 @@
                 <textarea class="form-control" name="description" id="description" rows="3"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit Order</button>
+            <!-- Submit Button -->
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Submit Order</button>
+            </div>
         </form>
-        <a href="/logout" class="btn btn-link">Logout</a>
+        <a href="/logout" class="btn btn-link mt-3">Logout</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -93,12 +122,20 @@
         document.getElementById("add-product-btn").addEventListener("click", function () {
             const productsSection = document.getElementById("products-section");
             const productRow = document.createElement("div");
-            productRow.classList.add("product-row", "d-flex", "align-items-center");
+            productRow.classList.add("row", "product-row", "align-items-center");
             productRow.innerHTML = `
-                <input type="text" class="form-control me-2 product-search" placeholder="Search Product">
-                <select class="form-select me-2 product-dropdown" name="product_name[]" required></select>
-                <input type="number" class="form-control me-2" name="quantity[]" placeholder="Quantity" min="1" required>
-                <button type="button" class="btn btn-danger remove-product-btn">Remove</button>
+                <div class="col-sm-6 col-md-4">
+                    <input type="text" class="form-control product-search" placeholder="Search Product">
+                </div>
+                <div class="col-sm-3 col-md-4">
+                    <select class="form-select product-dropdown" name="product_name[]" required></select>
+                </div>
+                <div class="col-sm-3 col-md-2">
+                    <input type="number" class="form-control" name="quantity[]" placeholder="Quantity" min="1" required>
+                </div>
+                <div class="col-12 col-md-2 mt-2 mt-md-0">
+                    <button type="button" class="btn btn-danger w-100 remove-product-btn">Remove</button>
+                </div>
             `;
             productsSection.appendChild(productRow);
         });
@@ -106,7 +143,7 @@
         // Remove product row
         document.addEventListener("click", function (event) {
             if (event.target.classList.contains("remove-product-btn")) {
-                event.target.parentElement.remove();
+                event.target.closest(".product-row").remove();
             }
         });
 
@@ -119,7 +156,7 @@
                 );
 
                 // Display matches in the dropdown
-                let dropdown = event.target.nextElementSibling; // The dropdown
+                let dropdown = event.target.closest(".product-row").querySelector(".product-dropdown");
                 dropdown.innerHTML = ""; // Clear existing options
                 if (matches.length > 0) {
                     matches.forEach((match) => {
@@ -132,14 +169,6 @@
                 } else {
                     dropdown.classList.add("is-invalid");
                 }
-            }
-        });
-
-        // Ensure the selected product is used in the dropdown
-        document.addEventListener("change", function (event) {
-            if (event.target.classList.contains("product-dropdown")) {
-                const selectedValue = event.target.value;
-                console.log("Selected product:", selectedValue); // Debugging (remove later)
             }
         });
     </script>
