@@ -5,6 +5,7 @@ import csv
 from datetime import datetime
 from flask import send_file
 from fpdf import FPDF
+from flask import flash
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  # Secret key for session management
@@ -84,12 +85,50 @@ def generate_pdf(salesman, customer_account, store_name, delivery_date, priority
         else:
             pdf.ln(10)
 
-    # Save PDF
+    # Ensure the output directory exists
     output_dir = "static/pdfs"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
     pdf_filename = f"{output_dir}/order_{customer_account}.pdf"
     pdf.output(pdf_filename)
     return pdf_filename
 
+
+@app.route("/dashboard")
+def dashboard():
+    if "salesman" not in session:
+        return redirect(url_for("login"))
+
+    try:
+        # Read orders from the CSV file
+        with open("orders.csv", "r") as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip header row
+            orders = list(reader)
+
+        total_orders = len(orders)
+        recent_orders = orders[-5:] if len(orders) > 5 else orders
+
+        # Get the most recent order's PDF file
+        if orders:
+            last_order = orders[-1]
+            customer_account = last_order[1]
+            pdf_path = f"/static/pdfs/order_{customer_account}.pdf"
+        else:
+            pdf_path = None
+
+    except FileNotFoundError:
+        total_orders = 0
+        recent_orders = []
+        pdf_path = None
+
+    return render_template(
+        "dashboard.html",
+        total_orders=total_orders,
+        recent_orders=recent_orders,
+        pdf_path=pdf_path
+    )
 
 
 
@@ -213,9 +252,13 @@ def order_form():
             products=paired_products,
             staff_placeholders=["Order Pulled", "Order Verified", "Order Shipped", "Payment"]
         )
+        # Flash a success message
+        flash("Order submitted successfully!", "success")
+        return redirect(url_for("dashboard"))
 
         # Redirect to success page
         return render_template("order_success.html", customer_account=customer_account, pdf_filename=pdf_filename)
+
 
     # Render the order form for GET requests
     return render_template("order_form.html")

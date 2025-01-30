@@ -1,0 +1,22 @@
+/* Enhance button responsiveness */
+.btn {
+    font-size: 1rem;
+}
+
+@media (max-width: 576px) {
+    .btn {
+        font-size: 0.9rem;
+    }
+
+    .welcome-container, .order-form-container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+}
