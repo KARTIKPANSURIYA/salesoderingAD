@@ -1,0 +1,13 @@
+Salesman,Customer Account,Store Name,Product Details,Delivery Date,Priority,Description
+John Doe,123,store1,"kyk 3
+",2025-01-30,Medium,
+John Doe,11,11,1,2025-01-31,Low,
+John Doe,123,store1,"[('cr', '12'), ('gra', '20')]",2025-01-30,Low,
+John Doe,546,freshmart,"[('ce', '12'), ('Garnier Organic Lavandin Glow Oil 30ml', '20')]",2025-01-30,Medium,2
+John Doe,091,smoke,"[('sam', '12'), ('CeraVe Facial Moisturising Lotion SPF 25 52ml', '16'), ('By Terry Detoxilyn City Essence Toner', '12')]",2025-01-30,Medium,"50% 1
+50 % 2"
+John Doe,1231451,store1,"[('cer', '12'), ('Polaar Arctic Cotton Gentle Scrub 50ml', '10')]",2025-01-30,Medium,
+John Doe,134,fren,"[('ce', '24'), ('Dr.Jart+ Cicapair Tiger Grass Calming Mask', '245')]",2025-01-30,Medium,
+John Doe,123,store1,"[('c', '12'), ('CeraVe Facial Moisturising Lotion SPF 25 52ml', '10')]",2025-01-30,Low,
+John Doe,909,storeee,"[('cer', '12'), ('PIXI Makeup Melting Cleansing Cloths (40 Wipes)', '12')]",2025-01-30,High,aa
+John Doe,001,hm1,"[('cera', '12'), ('Omorovicza Queen of Hungary Mist 30ml', '12')]",2025-01-31,Medium,1-50% 2-50%
