@@ -1,14 +1,10 @@
 Salesman,Customer Account,Store Name,Product Details,Delivery Date,Priority,Description
-John Doe,123,store1,"kyk 3
-",2025-01-30,Medium,
 John Doe,11,11,1,2025-01-31,Low,
-John Doe,123,store1,"[('cr', '12'), ('gra', '20')]",2025-01-30,Low,
 John Doe,546,freshmart,"[('ce', '12'), ('Garnier Organic Lavandin Glow Oil 30ml', '20')]",2025-01-30,Medium,2
 John Doe,091,smoke,"[('sam', '12'), ('CeraVe Facial Moisturising Lotion SPF 25 52ml', '16'), ('By Terry Detoxilyn City Essence Toner', '12')]",2025-01-30,Medium,"50% 1
 50 % 2"
 John Doe,1231451,store1,"[('cer', '12'), ('Polaar Arctic Cotton Gentle Scrub 50ml', '10')]",2025-01-30,Medium,
 John Doe,134,fren,"[('ce', '24'), ('Dr.Jart+ Cicapair Tiger Grass Calming Mask', '245')]",2025-01-30,Medium,
-John Doe,123,store1,"[('c', '12'), ('CeraVe Facial Moisturising Lotion SPF 25 52ml', '10')]",2025-01-30,Low,
 John Doe,909,storeee,"[('cer', '12'), ('PIXI Makeup Melting Cleansing Cloths (40 Wipes)', '12')]",2025-01-30,High,aa
 John Doe,001,hm1,"[('cera', '12'), ('Omorovicza Queen of Hungary Mist 30ml', '12')]",2025-01-31,Medium,1-50% 2-50%
 John Doe,001,store1,"[('cer', '12'), ('Polaar Arctic Cotton Gentle Scrub 50ml', '11')]",2025-01-31,High,"1,2 "
@@ -16,7 +12,6 @@ John Doe,9021,fm11,"[('ce', '20'), ('Polaar Arctic Cotton Gentle Scrub 50ml', '3
 50%-2"
 John Doe,001,store1,"[('cer', '12'), ('CeraVe Moisturising Cream 454g', '5'), ('Dr.Jart+ Cicapair Tiger Grass Calming Mask', '12'), ('Polaar Arctic Cotton Gentle Scrub 50ml', '3')]",2025-02-07,Low,2
 John Doe,001,fm3,"[('cer', '12'), ('PIXI Makeup Melting Cleansing Cloths (40 Wipes)', '13'), ('Dear, Klairs Rich Moist Soothing Tencel Sheet Mask 25ml', '12')]",2025-01-31,High,2
-John Doe,123,store1,"[('cer', '21'), ('PIXI Makeup Melting Cleansing Cloths (40 Wipes)', '12'), (""L'Oréal Men Expert Pure & Matte Anti-Shine Moisturising Gel (50ml)"", '12'), ('First Aid Beauty Ultra Repair Cream (170g)', '3'), ('Dr.Jart+ Cicapair Tiger Grass Calming Mask', '5')]",2025-01-31,High,2
 John Doe,001,store1,"[('sam', '12'), ('Garnier Ambre Solaire Natural Bronzer Quick Drying Dark Self Tan Face Mist 75ml', '3'), ('PIXI Makeup Melting Cleansing Cloths (40 Wipes)', '3')]",2025-01-31,Medium,2
 John Doe,001,store1,"[('CeraVe Moisturising Lotion 473ml', '12'), ('Avène Antirougeurs Jour Redness Relief Moisturizing Protecting Cream (40ml)', '12')]",2025-01-31,Low,1
 John Doe,0882,smokeshop,"[('CeraVe Moisturising Cream 50ml', '2'), ('CeraVe Moisturising Lotion 473ml', '3'), ('CeraVe Facial Moisturising Lotion SPF 25 52ml', '7'), ('Holika Holika Aloe Soothing Essence 98% Mist', '4'), ('Estée Lauder DayWear Advanced Multi-Protection Anti-Oxidant Creme SPF15 N/C 50ml', '10')]",2025-01-31,Medium,"50%-2
@@ -50,10 +45,9 @@ John Doe,00452,smokead,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'NIOD H
 John Doe,0654,Smoke-AD,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'CeraVe Moisturising Cream 454g', 'quantity': '3'}, {'ad_code': 'AD2', 'barcode': 'BAR002', 'name': 'CeraVe Facial Moisturising Lotion SPF 25 52ml', 'quantity': '4'}, {'ad_code': 'AD3', 'barcode': 'BAR003', 'name': 'The Ordinary Hyaluronic Acid 2% + B5 Hydration Support Formula 30ml', 'quantity': '8'}, {'ad_code': 'AD4', 'barcode': 'BAR004', 'name': 'AMELIORATE Transforming Body Lotion 200ml', 'quantity': '7'}, {'ad_code': 'AD5', 'barcode': 'BAR005', 'name': 'First Aid Beauty Ultra Repair Cream (56.7g)', 'quantity': '8'}, {'ad_code': 'AD6', 'barcode': 'BAR006', 'name': 'JASON Aloe Vera 98% Moisturising Gel Tube 113g', 'quantity': '3'}]",2025-02-04,Low,2025-01-30 13:29:18,"50%-1, 50%-2"
 John Doe,0019,as,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'CeraVe Facial Moisturising Lotion No SPF 52ml', 'quantity': '3'}, {'ad_code': 'AD2', 'barcode': 'BAR002', 'name': 'The Ordinary Hyaluronic Acid 2% + B5 Hydration Support Formula 30ml', 'quantity': '4'}, {'ad_code': 'AD3', 'barcode': 'BAR003', 'name': 'Weleda Skin Food (75ml)', 'quantity': '2'}]",2025-01-31,Low,2025-01-30 13:44:05,1
 John Doe,00761,ad,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'CeraVe Facial Moisturising Lotion No SPF 52ml', 'quantity': '1'}]",2025-01-31,Low,2025-01-30 13:50:01,1
-John Doe,123,store1,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'CeraVe Moisturising Cream 454g', 'quantity': '12'}]",2025-01-31,Low,2025-01-30 17:57:04,1
 John Doe,001,a,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'La Roche-Posay Nutritic Intense Rich 50ml', 'quantity': '12'}]",2025-01-31,Low,2025-01-30 18:00:05,1
 John Doe,001,store1,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'CeraVe Smoothing Cream 177ml', 'quantity': '12'}]",2025-01-31,Low,2025-01-30 18:18:36,a
-John Doe,123,store1,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'The Ordinary Hyaluronic Acid 2% + B5 Hydration Support Formula 30ml', 'quantity': '1'}, {'ad_code': 'AD2', 'barcode': 'BAR002', 'name': 'CeraVe Moisturising Cream 454g', 'quantity': '3'}]",2025-01-31,Low,2025-01-30 18:33:25,a
 John Doe,001,Hmj,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'The Ordinary Hyaluronic Acid 2% + B5 Hydration Support Formula 30ml', 'quantity': '6'}, {'ad_code': 'AD2', 'barcode': 'BAR002', 'name': 'PIXI Makeup Melting Cleansing Cloths (40 Wipes)', 'quantity': '3'}]",2025-01-31,Low,2025-01-30 18:34:36,
 John Doe,00452,smoke-burnout,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'Elizabeth Arden Eight Hour Great 8 Daily Defense Moisturizer 45ml', 'quantity': '12'}, {'ad_code': 'AD2', 'barcode': 'BAR002', 'name': 'CeraVe Moisturising Lotion 473ml', 'quantity': '8'}]",2025-01-31,Low,2025-01-30 18:39:46,1
 John Doe,0081,Dmk,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'CeraVe Facial Moisturising Lotion No SPF 52ml', 'quantity': '13'}, {'ad_code': 'AD2', 'barcode': 'BAR002', 'name': 'Skin Doctors Sd White & Bright (50ml)', 'quantity': '54'}]",2025-01-31,Low,2025-01-30 23:20:31,1
+John Doe,001,bj,"[{'ad_code': 'AD1', 'barcode': 'BAR001', 'name': 'First Aid Beauty Hello FAB Coconut Water Cream', 'quantity': '12'}]",2025-02-05,Low,2025-02-01 09:55:23,

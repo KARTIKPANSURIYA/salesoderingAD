@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, Response
 import csv
 from datetime import datetime
 from flask import send_file
@@ -10,7 +10,240 @@ from flask import flash
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  # Secret key for session management
 
+# Hardcoded Admin Credentials (You can later store this in a database)
+ADMIN_CREDENTIALS = {
+    "admin": "admin123"  # Username: Password
+}
 
+########## ADMIN SETTINGS
+# Admin Login Route
+@app.route("/admin-login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        admin_id = request.form["admin_id"]
+        password = request.form["password"]
+
+        if admin_id in ADMIN_CREDENTIALS and ADMIN_CREDENTIALS[admin_id] == password:
+            session["admin"] = admin_id  # Store admin session
+            flash("Admin login successful!", "success")
+            return redirect(url_for("admin_dashboard"))
+        else:
+            flash("Invalid credentials!", "danger")
+
+    return render_template("admin_login.html")
+# Admin Logout Route
+@app.route("/admin-logout")
+def admin_logout():
+    session.pop("admin", None)  # Remove admin from session
+    flash("You have been logged out.", "info")
+    return redirect(url_for("admin_login"))
+
+# View All Salesmen
+@app.route("/admin-salesmen")
+def admin_salesmen():
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    salesmen = []
+    try:
+        with open("salesmen.csv", "r") as file:
+            reader = csv.DictReader(file)
+            salesmen = list(reader)
+    except FileNotFoundError:
+        flash("Salesmen data not found!", "danger")
+
+    return render_template("admin_salesmen.html", salesmen=salesmen)
+
+# Add a New Salesman
+@app.route("/admin-add-salesman", methods=["GET", "POST"])
+def admin_add_salesman():
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    if request.method == "POST":
+        salesman_id = request.form["salesman_id"]
+        name = request.form["name"]
+        password = request.form["password"]
+
+        # Append new salesman to CSV
+        with open("salesmen.csv", "a", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow([salesman_id, name, password])
+
+        flash("Salesman account created successfully!", "success")
+        return redirect(url_for("admin_salesmen"))
+
+    return render_template("admin_add_salesman.html")
+
+@app.route("/admin-dashboard")
+def admin_dashboard():
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    # Count salesmen from salesmen.csv
+    try:
+        with open("salesmen.csv", "r") as file:
+            reader = csv.DictReader(file)
+            salesmen = list(reader)
+            total_salesmen = len(salesmen)
+    except FileNotFoundError:
+        total_salesmen = 0
+
+    # Count orders from orders.csv (Handle Empty File)
+    total_orders = 0
+    try:
+        with open("orders.csv", "r") as file:
+            reader = csv.reader(file)
+            header = next(reader, None)  # Skip header safely
+
+            if header:  # If the file is not empty
+                orders = list(reader)
+                total_orders = len(orders)
+
+    except FileNotFoundError:
+        total_orders = 0
+
+    return render_template(
+        "admin_dashboard.html",
+        total_salesmen=total_salesmen,
+        total_orders=total_orders
+    )
+
+@app.route("/admin-orders")
+def admin_orders():
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    orders = []
+    try:
+        with open("orders.csv", "r") as file:
+            reader = csv.reader(file)
+            header = next(reader, None)  # Get the header row
+
+            if header:
+                for row in reader:
+                    orders.append(row)
+
+    except FileNotFoundError:
+        flash("No orders found!", "danger")
+
+    return render_template("admin_orders.html", orders=orders)
+
+# orders download admin dashboard
+@app.route("/download-orders")
+def download_orders():
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    try:
+        with open("orders.csv", "r") as file:
+            csv_content = file.read()
+
+        response = Response(csv_content, mimetype="text/csv")
+        response.headers["Content-Disposition"] = "attachment; filename=all_orders.csv"
+        return response
+
+    except FileNotFoundError:
+        flash("No orders available to download!", "danger")
+        return redirect(url_for("admin_orders"))
+# Edit Salesman
+@app.route("/admin-edit-salesman/<salesman_id>", methods=["GET", "POST"])
+def admin_edit_salesman(salesman_id):
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    salesmen = []
+    try:
+        with open("salesmen.csv", "r") as file:
+            reader = csv.DictReader(file)
+            salesmen = list(reader)
+    except FileNotFoundError:
+        flash("Salesmen data not found!", "danger")
+        return redirect(url_for("admin_salesmen"))
+
+    # Find the salesman to edit
+    salesman = next((s for s in salesmen if s["salesman_id"] == salesman_id), None)
+
+    if not salesman:
+        flash("Salesman not found!", "danger")
+        return redirect(url_for("admin_salesmen"))
+
+    if request.method == "POST":
+        new_id = request.form["salesman_id"]
+        new_name = request.form["name"]
+        new_password = request.form["password"]
+
+        # Update the salesman record
+        for s in salesmen:
+            if s["salesman_id"] == salesman_id:
+                s["salesman_id"] = new_id
+                s["name"] = new_name
+                s["password"] = new_password
+
+        # Save updated data to CSV
+        with open("salesmen.csv", "w", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=["salesman_id", "name", "password"])
+            writer.writeheader()
+            writer.writerows(salesmen)
+
+        flash("Salesman details updated successfully!", "success")
+        return redirect(url_for("admin_salesmen"))
+
+    return render_template("admin_edit_salesman.html", salesman=salesman)
+
+# Delete Salesman
+@app.route("/admin-delete-salesman/<salesman_id>", methods=["POST"])
+def admin_delete_salesman(salesman_id):
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    salesmen = []
+    try:
+        with open("salesmen.csv", "r") as file:
+            reader = csv.DictReader(file)
+            salesmen = list(reader)
+    except FileNotFoundError:
+        flash("Salesmen data not found!", "danger")
+        return redirect(url_for("admin_salesmen"))
+
+    # Remove the salesman with matching ID
+    salesmen = [s for s in salesmen if s["salesman_id"] != salesman_id]
+
+    # Save updated data to CSV
+    with open("salesmen.csv", "w", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=["salesman_id", "name", "password"])
+        writer.writeheader()
+        writer.writerows(salesmen)
+
+    flash("Salesman deleted successfully!", "success")
+    return redirect(url_for("admin_salesmen"))
+
+@app.route("/admin-delete-order/<customer_account>", methods=["POST"])
+def admin_delete_order(customer_account):
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    orders = []
+    try:
+        with open("orders.csv", "r") as file:
+            reader = csv.reader(file)
+            header = next(reader, None)
+            orders = [row for row in reader if row[1] != customer_account]
+    except FileNotFoundError:
+        flash("Orders not found!", "danger")
+        return redirect(url_for("admin_orders"))
+
+    # Save updated orders back to CSV
+    with open("orders.csv", "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+        writer.writerows(orders)
+
+    flash("Order deleted successfully!", "success")
+    return redirect(url_for("admin_orders"))
+
+
+##########
 class CustomPDF(FPDF):
     def header(self):
         # Minimal header with title
