@@ -109,25 +109,121 @@ def admin_dashboard():
         total_orders=total_orders
     )
 
-@app.route("/admin-orders")
+
+@app.route("/admin-edit-order/<order_id>", methods=["GET", "POST"])
+def admin_edit_order(order_id):
+    # Fetch all orders
+    orders = []
+    with open("orders.csv", "r") as file:
+        reader = csv.reader(file)
+        header = next(reader)  # Save the header row
+        for row in reader:
+            orders.append(row)
+
+    # Find the specific order to edit
+    order_to_edit = None
+    for order in orders:
+        if order[1] == order_id:  # Assuming order ID is in the second column
+            order_to_edit = order
+            break
+
+    if not order_to_edit:
+        flash("Order not found!", "danger")
+        return redirect("/admin-orders")
+
+    # Fetch the list of products
+    products = []
+    with open("skincare_products_clean.csv", "r") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            products.append({"name": row["product_name"], "price": row.get("price", "")})
+
+    # On POST, update the order
+    if request.method == "POST":
+        updated_order = [
+            request.form["salesman"],
+            order_id,
+            request.form["store_name"],
+            str([{"name": name, "quantity": qty} for name, qty in zip(request.form.getlist("product_name[]"), request.form.getlist("quantity[]"))]),
+            request.form["delivery_date"],
+            request.form["priority"],
+            order_to_edit[6],  # Preserve original order placed date
+            request.form["description"]
+        ]
+
+        # Update the order in the list
+        for idx, order in enumerate(orders):
+            if order[1] == order_id:
+                orders[idx] = updated_order
+                break
+
+        # Save all orders back to the file
+        with open("orders.csv", "w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(header)  # Write the header row
+            writer.writerows(orders)  # Write all updated orders
+
+        flash("Order updated successfully!", "success")
+        return redirect("/admin-orders")
+
+    # Render the edit order page
+    return render_template(
+        "admin_edit_order.html",
+        order=order_to_edit,
+        product_details=eval(order_to_edit[3]),  # Convert string back to product details
+        products=products,
+    )
+
+
+
+@app.route("/admin-orders", methods=["GET"])
 def admin_orders():
     if "admin" not in session:
         return redirect(url_for("admin_login"))
 
     orders = []
+    search_query = request.args.get("search", "").lower()
+    filter_priority = request.args.get("priority", "")
+    filter_date = request.args.get("date", "")  # Delivery Date
+    filter_order_date = request.args.get("order_date", "")  # Order Placed Date
+
     try:
         with open("orders.csv", "r") as file:
             reader = csv.reader(file)
-            header = next(reader, None)  # Get the header row
+            header = next(reader, None)
 
-            if header:
-                for row in reader:
-                    orders.append(row)
+            for row in reader:
+                if len(row) < 8:
+                    continue  # Skip invalid rows
+
+                salesman, customer_account, store_name, product_details, delivery_date, priority, order_date, description = row
+
+                # Extract only the date portion from the order_date field for comparison
+                order_date_only = order_date.split(" ")[0]  # Get date part (e.g., "2025-01-30")
+
+                # Ensure correct filtering logic
+                if (
+                        (search_query in salesman.lower() or
+                         search_query in customer_account.lower() or
+                         search_query in store_name.lower())
+                        and (filter_priority == "" or filter_priority == priority)
+                        and (filter_date == "" or filter_date == delivery_date)
+                        and (filter_order_date == "" or filter_order_date == order_date_only)  # Updated filtering
+                ):
+                    orders.append(
+                        [salesman, customer_account, store_name, product_details, delivery_date, priority, order_date,
+                         description])
+
+        # Sort orders by order placing date (latest first)
+        orders.sort(key=lambda x: x[6], reverse=True)
 
     except FileNotFoundError:
         flash("No orders found!", "danger")
 
-    return render_template("admin_orders.html", orders=orders)
+    return render_template("admin_orders.html", orders=orders, search_query=search_query,
+                           filter_priority=filter_priority, filter_date=filter_date,
+                           filter_order_date=filter_order_date)
+
 
 # orders download admin dashboard
 @app.route("/download-orders")
